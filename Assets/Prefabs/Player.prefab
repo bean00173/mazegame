@@ -60,7 +60,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 526753307576256837}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c15859c89cf4a0449ae81d8a2ef35dfa, type: 3}
+  m_Script: {fileID: 11500000, guid: 4ce1b41a80a11774d81b250d8fd80b9c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   headCam: {fileID: 526753307724655355}
@@ -253,5 +253,6 @@ Light:
   m_UseColorTemperature: 0
   m_BoundingSphereOverride: {x: 0, y: 0, z: 0, w: 0}
   m_UseBoundingSphereOverride: 0
+  m_UseViewFrustumForShadowCasterCull: 1
   m_ShadowRadius: 0
   m_ShadowAngle: 0
