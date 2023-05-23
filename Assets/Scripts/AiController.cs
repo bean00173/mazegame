@@ -25,6 +25,7 @@ public class AiController : MonoBehaviour
         get { return hallWidth; }
         set { hallWidth = value; }
     }
+
     [SerializeField] private float monsterSpeed;
     private int startRow = -1;
     private int startCol = -1;
@@ -183,6 +184,8 @@ public class AiController : MonoBehaviour
 
             List<Node> path = FindPath(startRow, startCol, playerRow, playerCol);
 
+            Debug.Log(path + ", " + path.Count);
+
             if (path != null && path.Count > 1)
             {
                 Node nextNode = path[1];
@@ -201,5 +204,12 @@ public class AiController : MonoBehaviour
                 }
             }
         }
+    }
+
+    public void StopAI()
+    {
+        startRow = -1;
+        startCol = -1;
+        Destroy(monster);
     }
 }

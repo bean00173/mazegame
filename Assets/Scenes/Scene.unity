@@ -254,8 +254,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 41caf9be21a42cb47b887a9bbd45c7d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rows: 21
-  cols: 21
+  rows: 11
+  cols: 11
   playerPrefab: {fileID: 526753307576256837, guid: 6e64b2f6badf9454289b5e938aec0fc6, type: 3}
   monsterPrefab: {fileID: 895211356916686346, guid: 660ff9bfdc9118e4ea68b56ee70748eb, type: 3}
 --- !u!114 &375471307
@@ -303,7 +303,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 891fdc86e01f61c4ba3ffdbbde171730, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  monsterSpeed: 2
+  monsterSpeed: 1
 --- !u!1 &974588508
 GameObject:
   m_ObjectHideFlags: 0
