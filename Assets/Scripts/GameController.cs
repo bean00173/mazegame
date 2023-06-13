@@ -16,6 +16,8 @@ public class GameController : MonoBehaviour
 
     private AiController aIController;
 
+    public GameObject sphereParent;
+
     private int index;
 
     void Awake()
@@ -69,36 +71,42 @@ public class GameController : MonoBehaviour
         {
             if(index == 0)
             {
+
+                Transform treasure = GameObject.Find("Treasure").transform;
+                Transform player = aIController.Player.transform;
+
+                List<Node> path = aIController.FindPath((int)Mathf.Round((player.position.x) / aIController.HallWidth), (int)Mathf.Round((player.position.z) / aIController.HallWidth), (int)Mathf.Round((treasure.position.x) / aIController.HallWidth), (int)Mathf.Round((treasure.position.z) / aIController.HallWidth));
+
+                Debug.Log("Finding Path");
+
+                if (path != null && path.Count > 1)
+                {
+                    foreach (Node node in path)
+                    {
+                        GameObject sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+                        sphere.transform.position = new Vector3(node.y * constructor.hallWidth, .5f, node.x * constructor.hallWidth);
+                        sphere.GetComponent<MeshRenderer>().material.color = Color.yellow;
+
+                        sphere.tag = "Waypoint";
+
+                        Destroy(sphere.GetComponent<SphereCollider>());
+                    }
+                }
+
                 index += 1;
             }
             else
             {
-                index = 0;
-
-                foreach (GameObject go in spheres)
+                GameObject[] points = GameObject.FindGameObjectsWithTag("Waypoint");
+                foreach (GameObject point in points)
                 {
-                    Destroy(go);
+                    Destroy(point);
                 }
+
+                index = 0;
             }
             
-            Transform treasure = GameObject.Find("Treasure").transform;
-            Transform player = aIController.Player.transform;
-
-            List<Node> path = aIController.FindPath((int)Mathf.Round((player.position.x)/aIController.HallWidth), (int)Mathf.Round((player.position.z)/aIController.HallWidth), (int)Mathf.Round((treasure.position.x) / aIController.HallWidth), (int)Mathf.Round((treasure.position.z) / aIController.HallWidth));
-
-            Debug.Log("Finding Path");
-
-            if(path!= null && path.Count > 1)
-            {
-                foreach (Node node in path)
-                {
-                    GameObject sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-                    spheres.Add(sphere.gameObject);
-                    sphere.transform.position = new Vector3(node.y * constructor.hallWidth, .5f, node.x * constructor.hallWidth);
-                    sphere.GetComponent<MeshRenderer>().material.color = Color.yellow;
-                    Destroy(sphere.GetComponent<SphereCollider>());
-                }
-            }
+            
         }
     }
 }

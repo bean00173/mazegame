@@ -258,6 +258,7 @@ MonoBehaviour:
   cols: 11
   playerPrefab: {fileID: 526753307576256837, guid: 6e64b2f6badf9454289b5e938aec0fc6, type: 3}
   monsterPrefab: {fileID: 895211356916686346, guid: 660ff9bfdc9118e4ea68b56ee70748eb, type: 3}
+  sphereParent: {fileID: 0}
 --- !u!114 &375471307
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -304,6 +305,37 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   monsterSpeed: 1
+--- !u!1 &796241742
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 796241743}
+  m_Layer: 0
+  m_Name: SphereParent
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &796241743
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 796241742}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &974588508
 GameObject:
   m_ObjectHideFlags: 0
