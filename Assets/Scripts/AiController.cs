@@ -184,8 +184,6 @@ public class AiController : MonoBehaviour
 
             List<Node> path = FindPath(startRow, startCol, playerRow, playerCol);
 
-            Debug.Log(path + ", " + path.Count);
-
             if (path != null && path.Count > 1)
             {
                 Node nextNode = path[1];

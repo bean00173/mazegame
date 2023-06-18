@@ -28,11 +28,18 @@ public class GameController : MonoBehaviour
 
     void Start()
     {
+        NewMaze();
+    }
+    
+    // Moved all Start Methods into separate, Now can be called multiple times, makes restarting on death easier.
+
+    private void NewMaze()
+    {
         constructor.GenerateNewMaze(rows, cols, OnTreasureTrigger);
 
         aIController.Graph = constructor.graph;
         aIController.Player = CreatePlayer();
-        aIController.Monster = CreateMonster();
+        aIController.Monster = CreateMonster(OnMonsterTrigger);
         aIController.HallWidth = constructor.hallWidth;
         aIController.StartAI();
     }
@@ -46,13 +53,25 @@ public class GameController : MonoBehaviour
         return player;
     }
 
-    private GameObject CreateMonster()
+    private GameObject CreateMonster(TriggerEventHandler monsterCallback)
     {
         Vector3 monsterPosition = new Vector3(constructor.goalCol * constructor.hallWidth, 0f, constructor.goalRow * constructor.hallWidth);
         GameObject monster = Instantiate(monsterPrefab, monsterPosition, Quaternion.identity);
         monster.tag = "Generated";
 
+        TriggerEventRouter tc = monster.AddComponent<TriggerEventRouter>();
+        tc.callback = monsterCallback;
+
         return monster;
+    }
+
+    private void OnMonsterTrigger(GameObject trigger, GameObject other)
+    {
+        Debug.Log("Gotcha!");
+
+        constructor.DisposeOldMaze();
+
+        NewMaze();
     }
 
     private void OnTreasureTrigger(GameObject trigger, GameObject other)
@@ -64,24 +83,27 @@ public class GameController : MonoBehaviour
 
     private void Update()
     {
+        // Within this update is most of the method to generate a path of spheres
 
         List<GameObject> spheres = new List<GameObject>();
 
         if (Input.GetKeyDown(KeyCode.F))
         {
-            if(index == 0)
+            if(index == 0) 
             {
 
                 Transform treasure = GameObject.Find("Treasure").transform;
                 Transform player = aIController.Player.transform;
 
-                List<Node> path = aIController.FindPath((int)Mathf.Round((player.position.x) / aIController.HallWidth), (int)Mathf.Round((player.position.z) / aIController.HallWidth), (int)Mathf.Round((treasure.position.x) / aIController.HallWidth), (int)Mathf.Round((treasure.position.z) / aIController.HallWidth));
+                // For some reason, when finding a path using the Node Positions, you have to flip the x and y (z),
+
+                List<Node> path = aIController.FindPath((int)Mathf.Round((player.position.z) / aIController.HallWidth), (int)Mathf.Round((player.position.x) / aIController.HallWidth), (int)Mathf.Round((treasure.position.x) / aIController.HallWidth), (int)Mathf.Round((treasure.position.z) / aIController.HallWidth));
 
                 Debug.Log("Finding Path");
 
                 if (path != null && path.Count > 1)
                 {
-                    foreach (Node node in path)
+                    foreach (Node node in path) // Cycle through new path and place yellow sphere on every node in path
                     {
                         GameObject sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
                         sphere.transform.position = new Vector3(node.y * constructor.hallWidth, .5f, node.x * constructor.hallWidth);
@@ -95,7 +117,7 @@ public class GameController : MonoBehaviour
 
                 index += 1;
             }
-            else
+            else // if spheres are already visible, delete them
             {
                 GameObject[] points = GameObject.FindGameObjectsWithTag("Waypoint");
                 foreach (GameObject point in points)
