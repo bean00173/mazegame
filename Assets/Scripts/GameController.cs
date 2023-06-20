@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 
 [RequireComponent(typeof(MazeConstructor))]
@@ -18,7 +19,7 @@ public class GameController : MonoBehaviour
 
     public GameObject sphereParent;
 
-    private int index;
+    private bool con = true;
 
     void Awake()
     {
@@ -39,7 +40,7 @@ public class GameController : MonoBehaviour
 
         aIController.Graph = constructor.graph;
         aIController.Player = CreatePlayer();
-        aIController.Monster = CreateMonster(OnMonsterTrigger);
+        aIController.Monster = CreateMonster(OnMonsterTrigger); // Adds in Monster Trigger Function as Param for Creating Monster
         aIController.HallWidth = constructor.hallWidth;
         aIController.StartAI();
     }
@@ -53,22 +54,23 @@ public class GameController : MonoBehaviour
         return player;
     }
 
-    private GameObject CreateMonster(TriggerEventHandler monsterCallback)
+    private GameObject CreateMonster(TriggerEventHandler monsterCallback) // Added in Callback Params for Creating Monster
     {
         Vector3 monsterPosition = new Vector3(constructor.goalCol * constructor.hallWidth, 0f, constructor.goalRow * constructor.hallWidth);
         GameObject monster = Instantiate(monsterPrefab, monsterPosition, Quaternion.identity);
         monster.tag = "Generated";
 
-        TriggerEventRouter tc = monster.AddComponent<TriggerEventRouter>();
+        TriggerEventRouter tc = monster.AddComponent<TriggerEventRouter>(); // Gives Monster New Component TriggerEventRouter
         tc.callback = monsterCallback;
 
         return monster;
     }
 
-    private void OnMonsterTrigger(GameObject trigger, GameObject other)
+    private void OnMonsterTrigger(GameObject trigger, GameObject other) // A New Trigger Function for when the Monster Hits you, Destroys Guide Path, Maze and Makes New Maze
     {
         Debug.Log("Gotcha!");
 
+        ClearGuidePath();
         constructor.DisposeOldMaze();
 
         NewMaze();
@@ -77,6 +79,9 @@ public class GameController : MonoBehaviour
     private void OnTreasureTrigger(GameObject trigger, GameObject other)
     {
         Debug.Log("You Won!");
+
+        ClearGuidePath();
+
         aIController.StopAI();
     }
 
@@ -89,7 +94,7 @@ public class GameController : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.F))
         {
-            if(index == 0) 
+            if(con) 
             {
 
                 Transform treasure = GameObject.Find("Treasure").transform;
@@ -114,21 +119,27 @@ public class GameController : MonoBehaviour
                         Destroy(sphere.GetComponent<SphereCollider>());
                     }
                 }
-
-                index += 1;
+                
+                con = false;
             }
             else // if spheres are already visible, delete them
             {
-                GameObject[] points = GameObject.FindGameObjectsWithTag("Waypoint");
-                foreach (GameObject point in points)
-                {
-                    Destroy(point);
-                }
-
-                index = 0;
+                ClearGuidePath();
             }
             
             
         }
+
+    }
+
+    private void ClearGuidePath() // Function to Get Rid of Path
+    {
+        GameObject[] points = GameObject.FindGameObjectsWithTag("Waypoint");
+        foreach (GameObject point in points)
+        {
+            Destroy(point);
+        }
+
+        con = true;
     }
 }
